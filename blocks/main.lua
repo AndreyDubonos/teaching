@@ -22,25 +22,9 @@ sky.y = 200
 
 physics.addBody( grass, "static", { friction=0.5, bounce=0.3 } )  
 
--- local block1 = display.newRect( -100, 150, 50, 50 )
--- physics.addBody( block1, "dynamic", { density=0.9, friction=0.3, bounce=0.3} )
--- block1:setFillColor(50)
--- block1.isSleepingAllowed = false
 
 function new_block()	
 	color = {} -- инициализация в одну строку?
-	color[1] = {201, 160, 220}
-	color[2] = {18, 10, 143}
-	color[3] = {208, 240, 192}
-	color[4] = {0, 255, 255}
-	color[5] = {0, 0, 255}
-	color[6] = {3, 192, 60}
-	color[7] = {255, 218, 185}
-	color[8] = {128, 128, 128}
-	color[9] = {253, 233, 16}
-	color[10] = {152, 255, 152}
-	color[11] = {175, 238, 238}
-	color[12] = {192, 192, 192}
 
 	color = {
 		{201, 160, 220},
