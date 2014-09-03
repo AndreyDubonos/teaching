@@ -9,6 +9,7 @@
 local physics = require("physics")
 physics.start()
 
+
 --display.setStatusBar( display.HiddenStatusBar )
 
 local grass = display.newImage("grass.png")  
