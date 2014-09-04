@@ -59,18 +59,20 @@ function new_block()
 	xRand= math.random(0,320)
 
 	
-	block = display.newRect( xRand, -10, 10, 10 ) -- before block = display.newRect( -100, 150, 50, 50 )
+	block = display.newRect( xRand, -10, 10, 10 ) 
 
-	block:setFillColor( color[colorRand][1], color[colorRand][2], color[colorRand][3] ) -- before block:setFillColor( color[rand][1], color[rand][2], color[rand][3] )
+	local color_trans = function( obj )
+		color_change = math.random(12)
+    	obj:setFillColor( color[color_change][1], color[color_change][2], color[color_change][3] ) 
+	end
+	block:setFillColor( color[colorRand][1], color[colorRand][2], color[colorRand][3] ) 
 	physics.addBody( block, { density=0.9, friction=0.3, bounce=0.3} )
 	table.insert( fraction_table, block )
 
+	transition.to( block,{ time=200, onRepeat=5, onComplete=color_trans } )
+
 	for key, item in pairs(fraction_table) do
-		--print( #fraction_table )
-		--print( i )
-	--	print( fraction_table[i].x )
-	--	print( fraction_table[i].y )
-		if ( item.x > display.contentWidth ) and ( item.y < 0 ) then -- nil value coordinate
+		if ( item.x > display.contentWidth ) and ( item.y < 0 ) then 
 			physics.removeBody(item)
 			table.remove( fraction_table, key )
 		end
