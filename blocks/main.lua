@@ -9,6 +9,18 @@
 local physics = require("physics")
 physics.start()
 
+local set_round = function( event )
+
+local phase = event.phase
+
+  if "began" == phase then
+  x = event.xStart   -- store x location of object
+  y = event.yStart   -- store y location of object
+  round = display.newRect( x, y, 70, 70)
+  physics.addBody( round, "static", { friction=0.5, bounce=0.3, radius=20 } ) 
+ end
+ return true
+end
 
 --display.setStatusBar( display.HiddenStatusBar )
 
@@ -20,12 +32,10 @@ sky.x = display.contentWidth / 2
 sky.y = 200
 
 
-physics.addBody( grass, "static", { friction=0.5, bounce=0.3 } )  
-
+physics.addBody( grass, "static", { friction=0.5, bounce=0.3 } )   
 
 function new_block()	
-	color = {} -- инициализация в одну строку?
-
+	
 	color = {
 		{201, 160, 220},
 		{18, 10, 143},
@@ -52,3 +62,4 @@ function new_block()
 end
 
 local dropCrates = timer.performWithDelay( 200, new_block, -1 ) -- infinitely -- before local dropCrates = timer.performWithDelay( 50, new_block, 100 )
+sky:addEventListener( "touch", set_round )
