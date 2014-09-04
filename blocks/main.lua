@@ -16,9 +16,10 @@ local phase = event.phase
   if "began" == phase then
   x = event.xStart   -- store x location of object
   y = event.yStart   -- store y location of object
-  round = display.newImageRect( "circle.png", 70, 70)
-  round.x = x
-  round.y = y
+  --round = display.newImageRect( "circle.png", 70, 70)
+  --round.x = x
+  --round.y = y
+  round = display.newCircle( x, y, 35 )
   physics.addBody( round, "static", { friction=0.5, bounce=0.3, radius=35 } ) 
  end
  return true
@@ -64,13 +65,28 @@ function new_block()
 	physics.addBody( block, { density=0.9, friction=0.3, bounce=0.3} )
 	table.insert( fraction_table, block )
 
-	--for i=1, (#fraction_table) do
+	for key, item in pairs(fraction_table) do
 		--print( #fraction_table )
 		--print( i )
 	--	print( fraction_table[i].x )
 	--	print( fraction_table[i].y )
-	--	if ( fraction_table[i].x > display.contentWidth ) and ( fraction_table[i].y > display.contentHeight ) then -- nil value coordinate
+		if ( item.x > display.contentWidth ) and ( item.y < 0 ) then -- nil value coordinate
+			physics.removeBody(item)
+			table.remove( fraction_table, key )
+		end
+	end
+
+
+
+
+
+
+	--frac_len = #fraction_table
+	--print( frac_len )
+	--for i=1, (frac_len) do
+	--	if ( fraction_table[i].x > display.contentWidth ) and ( fraction_table[i].x < 0 ) then 
 	--		table.remove( fraction_table, i )
+	--		frac_len = frac_len - 1
 	--	end
 	--end
 
