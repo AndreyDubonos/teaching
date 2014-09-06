@@ -83,8 +83,10 @@ function new_block()
 
 end
 local square = display.newRect( 10, 10, 80, 80 )
-	square:setFillColor( 1, 1, 1 )
-	transition.to( square, { time=8000, y=400, x=300, transition=easing.outInBounce} )
+	square:setFillColor( 0, 0, 1 )
+	transition.to( square, { time=8000, y=400, x=300, transition=easing.outInBounce, onComplete=function()
+		square:setFillColor( 0, 1, 0 )
+		end} )
 
 local dropCrates = timer.performWithDelay( 200, new_block, -1 ) -- infinitely -- before local dropCrates = timer.performWithDelay( 50, new_block, 100 )
 sky:addEventListener( "touch", set_round )
