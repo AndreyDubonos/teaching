@@ -36,7 +36,7 @@ function new_block()
 	end
 end
 
-local function onLocalCollision( self, event )
+local function onCollision(  event )
 
 	if ( event.phase == "began" ) then
 
@@ -63,8 +63,11 @@ local function onLocalCollision( self, event )
 	    	
 	    	sprite.x = event.x
 	    	sprite.y = event.y
+	    	print( event.x )
+	    	print( event.y )
+			print( event. )
 			sprite:play()
-	    	physics.removeBody(item)
+	    	--physics.removeBody(item)
 	    	table.remove( fraction_table, key )
 	    
 	end
@@ -72,9 +75,10 @@ end
 --item.collision = onLocalCollision
 --	crate1:addEventListener( "collision", crate1 )
 
+--Runtime:addEventListener( "collision", onCollision )
 grass.collision = onLocalCollision
 grass:addEventListener( "collision", grass )
 
 
-local dropCrates = timer.performWithDelay( 400, new_block, -1 )
+local dropCrates = timer.performWithDelay( 2000, new_block, -1 )
 
