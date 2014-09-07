@@ -36,25 +36,25 @@ function new_block()
 		if ( item.y > 425) then
 			local image_sheet = graphics.newImageSheet("Explosion_Spritesheet.png", {
 	    		--required parameters
-	    		width = 40,
-	    		height = 40,
-	    		numFrames = 20,
+	    		width = 400,
+	    		height = 400,
+	    		numFrames = 25,
 
 	    		--optional parameters; used for dynamic resolution support
-	    		sheetContentWidth = 200,  -- width of original 1x size of entire sheet
-	    		sheetContentHeight = 160   -- height of original 1x size of entire sheet
+	    		sheetContentWidth = 2000,  -- width of original 1x size of entire sheet
+	    		sheetContentHeight = 2000   -- height of original 1x size of entire sheet
 	        })-- right now
 
 	        local sprite = display.newSprite( image_sheet, 
 				{
 	    			name="walking",
 	    			start=1,
-	    			count=20,
-	    			time=100,
-	    			loopCount = 0,   -- Optional ; default is 0 (loop indefinitely)
-	    			loopDirection = "forward"    -- Optional ; values include "forward" or "bounce"
+	    			count=25,
+	    			time=1000,
+	    			loopCount = 1,   -- Optional ; default is 0 (loop indefinitely)
+	    			--loopDirection = "forward"    -- Optional ; values include "forward" or "bounce"
 				} )
-
+	        sprite:play()
 	        sprite.x = item.x
 	        sprite.y = item.y
 	        
