@@ -30,39 +30,51 @@ function new_block()
 
 	for key, item in pairs(fraction_table) do
 		if ( item.x > display.contentWidth ) and ( item.y < 0 ) then 
-			physics.removeBody(item)
-			table.remove( fraction_table, key )
-		end
-		if ( item.y > 425) then
-			local image_sheet = graphics.newImageSheet("Explosion_Spritesheet.png", {
-	    		--required parameters
-	    		width = 400,
-	    		height = 400,
-	    		numFrames = 25,
-
-	    		--optional parameters; used for dynamic resolution support
-	    		sheetContentWidth = 2000,  -- width of original 1x size of entire sheet
-	    		sheetContentHeight = 2000   -- height of original 1x size of entire sheet
-	        })-- right now
-
-	        local sprite = display.newSprite( image_sheet, 
-				{
-	    			name="walking",
-	    			start=1,
-	    			count=25,
-	    			time=1000,
-	    			loopCount = 1,   -- Optional ; default is 0 (loop indefinitely)
-	    			--loopDirection = "forward"    -- Optional ; values include "forward" or "bounce"
-				} )
-	        sprite:play()
-	        sprite.x = item.x
-	        sprite.y = item.y
-	        
-	        table.remove( fraction_table, key )
-
-		end
+			--physics.removeBody(item)
+			--table.remove( fraction_table, key )
+		end	
 	end
 end
+
+local function onLocalCollision( self, event )
+
+	if ( event.phase == "began" ) then
+
+		local image_sheet = graphics.newImageSheet("Explosion_Spritesheet.png", {
+
+			width = 400,
+			height = 400,
+			numFrames = 25,
+
+	    		
+			sheetContentWidth = 2000,  -- width of original 1x size of entire sheet
+			sheetContentHeight = 2000   -- height of original 1x size of entire sheet
+	    	})-- right now
+
+	    	local sprite = display.newSprite( image_sheet, 
+				{
+					name="walking",
+					start=1,
+					count=25,
+					time=1000,
+					loopCount = 1,  
+			
+				} )
+	    	
+	    	sprite.x = event.x
+	    	sprite.y = event.y
+			sprite:play()
+	    	physics.removeBody(item)
+	    	table.remove( fraction_table, key )
+	    
+	end
+end
+--item.collision = onLocalCollision
+--	crate1:addEventListener( "collision", crate1 )
+
+grass.collision = onLocalCollision
+grass:addEventListener( "collision", grass )
+
 
 local dropCrates = timer.performWithDelay( 400, new_block, -1 )
 
