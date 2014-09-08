@@ -18,14 +18,66 @@ sky.y = 200
 
 physics.addBody( grass, "static", { friction=0.5, bounce=0.3 } )
 fraction_table = {}
+name_current_block = 0
+
+
+
+
+
+local function onCollision(  event )
+
+	if ( event.phase == "began" ) then
+
+
+    	--print( event.x,event.y )
+    	print( name_current_block )
+    	print( event.other.myName )
+    	if (name_current_block ~= event.other.myName) then
+			local image_sheet = graphics.newImageSheet("Explosion_Spritesheet.png", {
+
+				width = 400,
+				height = 400,
+				numFrames = 25,
+
+		    		
+				sheetContentWidth = 2000,  -- width of original 1x size of entire sheet
+				sheetContentHeight = 2000   -- height of original 1x size of entire sheet
+	    		})-- right now
+
+			local sprite = display.newSprite( image_sheet, 
+				{
+					name="walking",
+					start=1,
+					count=25,
+					time=1000,
+					loopCount = 1,  
+			
+				} )
+	    	
+	    	sprite.x = event.other.x
+	    	sprite.y =  event.other.y
+			sprite:play()
+		end
+		name_current_block = event.other.myName   
+	end
+end
+--item.collision = onLocalCollision
+--	crate1:addEventListener( "collision", crate1 )
+
+--Runtime:addEventListener( "collision", onCollision )
+--grass.collision = onLocalCollision
 
 function new_block()
+	
 	xRand= math.random(0,320)
 	block = display.newRect( xRand, -10, 10, 10 )
 	block:setFillColor( 1, 1, 0) 
 
 	physics.addBody( block, { density=0.9, friction=0.3, bounce=0.3} )
 	table.insert( fraction_table, block )
+	block:addEventListener( "collision", onCollision )
+	block.myName = #fraction_table
+	--print( block.myName )
 
 
 	for key, item in pairs(fraction_table) do
@@ -36,49 +88,6 @@ function new_block()
 	end
 end
 
-local function onCollision(  event )
 
-	if ( event.phase == "began" ) then
-
-		local image_sheet = graphics.newImageSheet("Explosion_Spritesheet.png", {
-
-			width = 400,
-			height = 400,
-			numFrames = 25,
-
-	    		
-			sheetContentWidth = 2000,  -- width of original 1x size of entire sheet
-			sheetContentHeight = 2000   -- height of original 1x size of entire sheet
-	    	})-- right now
-
-	    	local sprite = display.newSprite( image_sheet, 
-				{
-					name="walking",
-					start=1,
-					count=25,
-					time=1000,
-					loopCount = 1,  
-			
-				} )
-	    	
-	    	sprite.x = event.other.x-event.x
-	    	sprite.y =  event.other.y-event.y
-	    	print( event.x,event.y )
-	    	--print(  )
-			--print( event. )
-			sprite:play()
-	    	--physics.removeBody(item)
-	    	table.remove( fraction_table, key )
-	    
-	end
-end
---item.collision = onLocalCollision
---	crate1:addEventListener( "collision", crate1 )
-
---Runtime:addEventListener( "collision", onCollision )
---grass.collision = onLocalCollision
-grass:addEventListener( "collision", onCollision )
-
-
-local dropCrates = timer.performWithDelay( 2000, new_block, -1 )
+local dropCrates = timer.performWithDelay( 4000, new_block, -1 )
 
