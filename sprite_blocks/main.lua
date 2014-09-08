@@ -43,23 +43,27 @@ local function onCollision(  event )
     	--print( event.other.myName )
     	--if (name_current_block ~= event.other.myName) then
 
+    	if(event.target.isFirstCollision==true) then
+			local sprite = display.newSprite( image_sheet, 
+				{
+					name="walking",
+					start=1,
+					count=25,
+					time=1000,
+					loopCount = 1,  
+			
+				} )
+	    	
+	    	sprite.x = event.target.x
+	    	sprite.y =  event.target.y
+			sprite:play()
+			--end
+			--name_current_block = event.other.myName   
+			
 
-		local sprite = display.newSprite( image_sheet, 
-			{
-				name="walking",
-				start=1,
-				count=25,
-				time=1000,
-				loopCount = 1,  
-		
-			} )
-    	
-    	sprite.x = event.target.x
-    	sprite.y =  event.target.y
-		sprite:play()
-		--end
-		--name_current_block = event.other.myName   
-		event.target:removeEventListener("collision", onCollision)
+			--event.target:removeEventListener("collision", onCollision)
+			event.target.isFirstCollision=false;
+		end
 	end
 end
 --item.collision = onLocalCollision
@@ -78,7 +82,7 @@ function new_block()
 	table.insert( fraction_table, block )
 	block:addEventListener( "collision", onCollision )
 	--block.myName = #fraction_table
-	--block.isFirstCollision=true;
+	block.isFirstCollision=true; -- TUT
 	--print( block.myName )
 
 
