@@ -61,11 +61,11 @@ local function onCollision(  event )
 			
 				} )
 	    	
-	    	sprite.x = event.x
-	    	sprite.y = event.y
-	    	print( event.x )
-	    	print( event.y )
-			print( event. )
+	    	sprite.x = event.other.x-event.x
+	    	sprite.y =  event.other.y-event.y
+	    	print( event.x,event.y )
+	    	--print(  )
+			--print( event. )
 			sprite:play()
 	    	--physics.removeBody(item)
 	    	table.remove( fraction_table, key )
@@ -76,8 +76,8 @@ end
 --	crate1:addEventListener( "collision", crate1 )
 
 --Runtime:addEventListener( "collision", onCollision )
-grass.collision = onLocalCollision
-grass:addEventListener( "collision", grass )
+--grass.collision = onLocalCollision
+grass:addEventListener( "collision", onCollision )
 
 
 local dropCrates = timer.performWithDelay( 2000, new_block, -1 )
