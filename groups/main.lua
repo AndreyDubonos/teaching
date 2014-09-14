@@ -8,6 +8,7 @@
 
 local group = display.newGroup()
 group.anchorChildren = true
+
 --group.anchorX = 1
 --group.anchorY = 1
 local block = display.newRect( 100, 100, 30, 30 )
