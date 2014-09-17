@@ -6,7 +6,7 @@
 
 -- Your code here
 
-local group = display.newGroup()
+--[[local group = display.newGroup()
 group.anchorChildren = true
 
 --group.anchorX = 1
@@ -50,4 +50,36 @@ transition.to(block1, {time=3000, delay=5000,rotation=45, onComplete=function()
 		block1.anchorY = 1
 		end} )
 
-transition.to(block1, {time=3000, delay=10000,rotation=75})
+transition.to(block1, {time=3000, delay=10000,rotation=75})]]--
+
+
+local button = display.newGroup()
+
+circle = display.newCircle(button, 200, 200, 40 )
+circle:setFillColor( 0, 0.4, 0.2)
+girl = display.newImage( "but_girl.png", 200, 200 )
+girl.height = 200
+girl.width = 200
+--group:insert( circle)
+button:insert( girl)
+button.anchorChildren = true
+
+button.x = 200
+button.y = 200
+
+button.anchorX = 0.5
+button.anchorY = 0.5
+
+--transition.to(button, {time=5000, delay=2000, xScale=1.2, yScale=1.2})
+
+local function onObjectTouch( event )
+    if event.phase == "began" then
+        transition.to(button, {time=400, xScale=1.1, yScale=1.1})
+    end
+
+    if event.phase == "ended" then
+        transition.to(button, {time=400, xScale=1, yScale=1})
+    end
+    return true
+end
+button:addEventListener( "touch", onObjectTouch )
