@@ -89,6 +89,7 @@ local function onObjectTouch( event )
     	--if ((event.x - 200)^2 + (event.y - 200)^2 < 1600) then
         display.getCurrentStage():setFocus( nil )
     	transition.to(button, {time=400, xScale=1, yScale=1})
+    	sensor:setFillColor(0.1*math.random(9),0.1*math.random(9),0.1*math.random(9))
     	--print( 2 )
         --end
     end
