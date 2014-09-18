@@ -74,12 +74,24 @@ button.anchorY = 0.5
 
 local function onObjectTouch( event )
     if event.phase == "began" then
-        transition.to(button, {time=400, xScale=1.1, yScale=1.1})
+    	if (((event.x - 200)^2 + (event.y - 200)^2) < 1600) then
+        	transition.to(button, {time=400, xScale=1.1, yScale=1.1})
+        end
     end
 
     if event.phase == "ended" then
-        transition.to(button, {time=400, xScale=1, yScale=1})
+    	--if ((event.x - 200)^2 + (event.y - 200)^2 < 1600) then
+    	transition.to(button, {time=400, xScale=1, yScale=1})
+    	--print( 2 )
+        --end
+    end
+    if event.phase == "moved" then
+    	if (((event.x - 200)^2 + (event.y - 200)^2) > 1600) then
+        	transition.to(button, {time=400, xScale=1, yScale=1})
+        	--print( (event.x - 200)^2 + (event.y - 200)^2 )
+        end
     end
     return true
 end
+
 button:addEventListener( "touch", onObjectTouch )
