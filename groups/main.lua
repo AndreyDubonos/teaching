@@ -70,27 +70,34 @@ button.y = 200
 button.anchorX = 0.5
 button.anchorY = 0.5
 
+local sensor = display.newCircle(50,50,50);
+
+
 --transition.to(button, {time=5000, delay=2000, xScale=1.2, yScale=1.2})
 
 local function onObjectTouch( event )
     if event.phase == "began" then
+        display.getCurrentStage():setFocus( event.target )
+
+        sensor:setFillColor(0.7,0.4,0.6)
     	if (((event.x - 200)^2 + (event.y - 200)^2) < 1600) then
-        	transition.to(button, {time=400, xScale=1.1, yScale=1.1})
+        	transition.to(button, {time=400, xScale=2, yScale=2})
         end
     end
 
     if event.phase == "ended" then
     	--if ((event.x - 200)^2 + (event.y - 200)^2 < 1600) then
+        display.getCurrentStage():setFocus( nil )
     	transition.to(button, {time=400, xScale=1, yScale=1})
     	--print( 2 )
         --end
     end
-    if event.phase == "moved" then
-    	if (((event.x - 200)^2 + (event.y - 200)^2) > 1600) then
-        	transition.to(button, {time=400, xScale=1, yScale=1})
-        	--print( (event.x - 200)^2 + (event.y - 200)^2 )
-        end
-    end
+    --if event.phase == "moved" then
+	--  if (((event.x - 200)^2 + (event.y - 200)^2) > 1600) then
+    --  	transition.to(button, {time=400, xScale=1, yScale=1})
+    --  	--print( (event.x - 200)^2 + (event.y - 200)^2 )
+    --  end
+    --end
     return true
 end
 
