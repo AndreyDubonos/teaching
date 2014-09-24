@@ -7,6 +7,7 @@
 -- Your code here
 
 local widget = require( "widget" )
+local table = require("cr_table")
 
 -- ScrollView listener
 --[[local function scrollListener( event )
@@ -30,7 +31,7 @@ local widget = require( "widget" )
 end]]
 
 -- Create the widget
-local scrollView = widget.newScrollView
+--[[local scrollView = widget.newScrollView
 {
     top = 100,
     left = 10,
@@ -39,28 +40,30 @@ local scrollView = widget.newScrollView
     scrollWidth = 600,
     scrollHeight = 800,
     listener = scrollListener
-}
+}]]
 
 -- Create a image and insert it into the scroll view
-local background = display.newImageRect( "Icon-ouya.png", 768, 1024 )
-local logotype = {}
-logotype[1] = display.newImageRect( "Icon-ouya.png", 50 ,50 )
-logotype[1].web = "http://google.com"
-logotype[1].x = 20   logotype[1].y = 20
-logotype[2] = display.newImageRect( "Icon-ouya.png", 50, 50 )
-logotype[2].web = "http://pikabu.ru"
-logotype[2].y = 100  logotype[2].x = 20
-scrollView:insert( background )
-scrollView:insert( logotype[1] )
-scrollView:insert( logotype[2] )
+logo {"Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png"}
+web {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "https://hall.com"}
+
+local button1 = widget.newButton
+{
+    width = 240,
+    height = 120,
+    defaultFile = "buttonDefault.png",
+    overFile = "buttonOver.png",
+    label = "button",
+    onEvent = handleButtonEvent
+}
+
+local function handleButtonEvent( event )
+
+    if ( "ended" == event.phase ) then
+        my_table = table.create_table(logo, web)
+    end
+end
+--scrollView:insert( background )
+--scrollView:insert( logotype[1] )
+--scrollView:insert( logotype[2] )
 --os.execute("start " .. logotype[1].web)
 --os.execute("start " .. logotype[2].web)
-
-local function openWeb( event )
-    if event.phase == "began" then
-    	os.execute("start " .. event.target.web)
-	end
-end
-
-logotype[1]:addEventListener( "touch", openWeb )
-logotype[2]:addEventListener( "touch", openWeb )
