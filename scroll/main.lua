@@ -43,13 +43,13 @@ end]]
 }]]
 
 -- Create a image and insert it into the scroll view
-logo = {"Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png"}
-web = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "https://hall.com"}
+logo = {"google.png", "pikabu.png", "tumblr.png", "twitter.png"}
+web = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "http://twitter.com"}
 function handleButtonEvent( event )
     if ( "began" == event.phase ) then
-        table.create_table()
-        --print( my_table )
-        --my_table:display_table(logo, web)
+        my_table = create_table()
+        --print( my_table[1] )
+        display_table(my_table, logo, web)
         print("1")
     end
     return true
@@ -57,10 +57,10 @@ end
 
 button1 = widget.newButton
 {
-    left = 100,
-    top = 200,
+    left = 70,
+    top = 400,
     id = "button1",
-    label = "Default",
+    label = "display",
     onPress = handleButtonEvent
 }
 
