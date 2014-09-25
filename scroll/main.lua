@@ -43,18 +43,19 @@ end]]
 }]]
 
 -- Create a image and insert it into the scroll view
-logo {"Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png"}
-web {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "https://hall.com"}
+logo = {"Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png"}
+web = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "https://hall.com"}
 
-local button1 = widget.newButton
-{
-    width = 240,
-    height = 120,
-    defaultFile = "buttonDefault.png",
-    overFile = "buttonOver.png",
+params = {
+    --width = 240,
+    --height = 120,
+    --defaultFile = "buttonDefault.png",
+    --overFile = "buttonOver.png",
     label = "button",
     onEvent = handleButtonEvent
 }
+
+local button1 = widget.newButton(params)
 
 local function handleButtonEvent( event )
 
