@@ -3,6 +3,7 @@ function create_table()
 	--table{}
 	--return table
 	print( "1" )
+	return true
 end
 
 function display_table(table, pic, adress)

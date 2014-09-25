@@ -47,8 +47,8 @@ logo = {"Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png"}
 web = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "https://hall.com"}
 function handleButtonEvent( event )
     if ( "began" == event.phase ) then
-        my_table = table.create_table()
-        print( my_table )
+        table.create_table()
+        --print( my_table )
         --my_table:display_table(logo, web)
         print("1")
     end
