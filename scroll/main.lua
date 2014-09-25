@@ -45,26 +45,35 @@ end]]
 -- Create a image and insert it into the scroll view
 logo = {"Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png", "Icon-ouya.png"}
 web = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "https://hall.com"}
+function handleButtonEvent( event )
+    if ( "began" == event.phase ) then
+        my_table = table.create_table()
+        print( my_table )
+        --my_table:display_table(logo, web)
+        print("1")
+    end
+    return true
+end
 
-params = {
-    --width = 240,
-    --height = 120,
-    --defaultFile = "buttonDefault.png",
-    --overFile = "buttonOver.png",
-    label = "button",
-    onEvent = handleButtonEvent
+button1 = widget.newButton
+{
+    left = 100,
+    top = 200,
+    id = "button1",
+    label = "Default",
+    onPress = handleButtonEvent
 }
 
-local button1 = widget.newButton(params)
 
-local function handleButtonEvent( event )
+--but = display.newRect( 50, 50, 50, 50 )
 
-    if ( "ended" == event.phase ) then
-        my_table = table.create_table(logo, web)
+--[[function handleButtonEvent:but( event )
+    if event.phase == "began" then
+        print( "You touched the object!" )
+        return true
     end
-end
---scrollView:insert( background )
---scrollView:insert( logotype[1] )
---scrollView:insert( logotype[2] )
---os.execute("start " .. logotype[1].web)
---os.execute("start " .. logotype[2].web)
+end]]
+
+
+
+--but:addEventListener( "touch", handleButtonEvent )

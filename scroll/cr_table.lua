@@ -1,14 +1,19 @@
 --local table {}
 function create_table()
-	return table
+	--table{}
+	--return table
+	print( "1" )
 end
 
 function display_table(table, pic, adress)
 	-- if lehgt(pic) == length(adress)
 	for i, j in pairs(pic) do
-		table[i].logo = display.newImageRect( j, 50, 50 )-- ERROR 5 parameters, documentation
-		table[i].logo.x = 30 table[i].logo.y = i*52 + 10 --EROR 30 что, умножить, делить
-		table[i].logo:addEventListener( "touch", openWeb(i, adress) )
+		print(pic)
+		print(web)
+		table[i].pic = display.newImageRect( j, 50, 50 )-- ERROR 5 parameters, documentation   display.newImageRect( [parentGroup,] filename, [baseDir,] width, height )
+		table[i].pic.x = 30 
+		table[i].pic.y = i*52 + 10 --EROR 30 что, умножить, делить
+		table[i].pic:addEventListener( "touch", openWeb(i, adress) )
 	end
 	-- body
 end
