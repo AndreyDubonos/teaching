@@ -7,7 +7,7 @@
 -- Your code here
 
 local widget = require( "widget" )
-local table = require("cr_table")
+local scroll = require("cr_table")
 
 -- ScrollView listener
 --[[local function scrollListener( event )
@@ -43,19 +43,26 @@ end]]
 }]]
 
 -- Create a image and insert it into the scroll view
-logo = {"google.png", "pikabu.png", "tumblr.png", "twitter.png"}
-web = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "http://twitter.com"}
+
+--Почему не local?
+local logos = {"google.png", "pikabu.png", "tumblr.png", "twitter.png"}
+local webs = {"http://google.com", "http://pikabu.ru", "http://www.tumblr.com", "http://twitter.com"}
+
+local data = {}
+for i=1, #logos do
+    table.insert(data, {logo=logos[i], web=webs[i]})
+end
+
 item_logo = "habrhabr.png"
 item_web = "http://habrahabr.ru"
 
-my_table = create_table()
+my_table = scroll.create_table()
 --print( my_table[1] )
-display_table(my_table, logo, web)
+my_table:display(data)
 
 function handleButtonEvent( event )
     if ( "began" == event.phase ) then
-        add_item(my_table, item_logo, item_web)
-        print("1")
+        my_table:addItem({logo = item_logo, web = item_web})
     end
     return true
 end

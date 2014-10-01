@@ -1,8 +1,16 @@
 
+local cr_table = {}
+
 local widget = require( "widget" )
 
-function create_table()
+function cr_table.create_table()
 	local table = {}
+	-- properties
+	table.view = display.newGroup()
+
+	--functions
+	table.display = display_table
+	table.addItem = addItem
 	return table
 	--print( "1" )
 	--return true
@@ -10,31 +18,84 @@ end
 
 
 
-function display_table(table, pic, adress)
+function display_table(self, data)
 
-	scrollView = widget.newScrollView
+	local scrollView = widget.newScrollView
 	{
-	    top = -10,
+	    top = 10,
 	    left = 0,
 	    width = 300,
 	    height = 400,
-	    --scrollWidth = 600,
-	    scrollHeight = 800,
 	    horizontalScrollDisabled = true,
     	hideBackground = true   
-	    --listener = scrollListener
 	}
 
+	self.scroll = scrollView
 
-	local background = display.newRect( 0, 0, 600, 800 )
+	local background = display.newRect( (scrollView.x+scrollView.width)/2, (scrollView.y+scrollView.height)/2, 300, 400 )
 	background:setFillColor( 0, 0, 0 )
-	scrollView:insert(background)
+
+	--Обрати внимение добавляю в группу self.view, которую верну в вызывающий код
+	self.view:insert(background)
+	self.view:insert(scrollView)
+	--scrollView:insert(background)
 
 	--scrollView:setScrollHeight( 100 )
 
 	--last_index = 0
 	
 	-- if lehgt(pic) == length(adress)
+	self.data = data
+	self.viewItems = {}
+
+	local sumHeight = 0
+	local separator = 5
+
+	for i=1, #self.data do
+		local tempGroup = display.newGroup()
+
+		local lable_back = display.newRect(tempGroup, 0, 0, 300, 50 )  --anchor		
+		lable_back.anchorX, lable_back.anchorY = 0, 0
+
+		local web_text = display.newText( 		{
+		    text = string.sub (self.data[i].web, 8),     
+		    x = 170,
+		    y = 25,
+		    --width = 500,     --required for multi-line and alignment
+		    font = native.systemFontBold,   
+		    fontSize = 20,
+		    --align = "center"  --new alignment parameter
+		} )
+		web_text:setFillColor( 0, 0, 0 )
+		tempGroup:insert(web_text)
+		
+
+		local logo = display.newImageRect( self.data[i].logo, 50, 50 )-- ERROR 5 parameters, documentation   display.newImageRect( [parentGroup,] filename, [baseDir,] width, height )
+		logo.x = 25 
+		logo.y = 25  --EROR 30 что, умножить, делить
+
+		tempGroup:insert(logo)
+
+		tempGroup.y = sumHeight
+
+		scrollView:insert(tempGroup)
+		table.insert(self.viewItems, tempGroup)
+
+		tempGroup:addEventListener( "touch", move_delete )
+		
+		table.last_index = i
+		--print( table.last_index )
+		logo:addEventListener( "touch", function(event)
+			    if event.phase == "began" then
+			    	os.execute("start " .. adress[i])
+				end
+			end )
+		
+		
+		sumHeight = sumHeight + lable_back.height + separator
+	end
+
+	--[[ daria
 	for i, j in pairs(pic) do
 		--print(i, j)
 
@@ -78,14 +139,57 @@ function display_table(table, pic, adress)
 				end
 			end )
 	end
+	--]]
 	-- body
-	return true
+	return self.view
 end
 
+function addItem(self, itemData)
+	local sumHeight = self.viewItems[#self.viewItems].y + 50 + 5
 
+	local tempGroup = display.newGroup()
 
+	local lable_back = display.newRect(tempGroup, 0, 0, 300, 50 )  --anchor		
+	lable_back.anchorX, lable_back.anchorY = 0, 0
 
+	local web_text = display.newText( 		{
+	    text = string.sub (itemData.web, 8),     
+	    x = 170,
+	    y = 25,
+	    --width = 500,     --required for multi-line and alignment
+	    font = native.systemFontBold,   
+	    fontSize = 20,
+	    --align = "center"  --new alignment parameter
+	} )
+	web_text:setFillColor( 0, 0, 0 )
+	tempGroup:insert(web_text)
+	
+
+	local logo = display.newImageRect(itemData.logo, 50, 50 )-- ERROR 5 parameters, documentation   display.newImageRect( [parentGroup,] filename, [baseDir,] width, height )
+	logo.x = 25 
+	logo.y = 25  --EROR 30 что, умножить, делить
+
+	tempGroup:insert(logo)
+
+	tempGroup.y = sumHeight
+
+	self.scroll:insert(tempGroup)
+	table.insert(self.viewItems, tempGroup)
+
+	tempGroup:addEventListener( "touch", move_delete )
+	
+	table.last_index = i
+	--print( table.last_index )
+	logo:addEventListener( "touch", function(event)
+		    if event.phase == "began" then
+		    	os.execute("start " .. adress[i])
+			end
+		end )
+end
+
+--[[
 function add_item(table, pic, adress )
+
 	table.last_index = table.last_index + 1
 	lable_back = display.newRect( 150, (table.last_index -1)*52 +30, 300, 50 )
 
@@ -122,6 +226,8 @@ function add_item(table, pic, adress )
 	-- body
 end
 
+]]
+
 
 function move_delete(event)
 	-- body
@@ -145,3 +251,5 @@ function move_delete(event)
     
     return true
 end
+
+return cr_table
