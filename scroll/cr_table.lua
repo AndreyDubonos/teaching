@@ -3,7 +3,22 @@ local cr_table = {}
 
 local widget = require( "widget" )
 
+local separator = 5
+--local itemHeight 
+
+
+local function allToPlace(scrollN)
+	local sumHeight = 0
+
+	for i=1, #scrollN.viewItems do
+		scrollN.viewItems[i].y = sumHeight
+
+		sumHeight = sumHeight + scrollN.viewItems[i].height + separator
+	end
+end
+
 function cr_table.create_table()
+	--НЕЛЬЗЯ НАЗЫВАТЬ table
 	local table = {}
 	-- properties
 	table.view = display.newGroup()
@@ -11,10 +26,13 @@ function cr_table.create_table()
 	--functions
 	table.display = display_table
 	table.addItem = addItem
+	table.stack = allToPlace
 	return table
 	--print( "1" )
 	--return true
 end
+
+
 
 
 
@@ -44,7 +62,7 @@ function display_table(self, data)
 	self.viewItems = {}
 
 	local sumHeight = 0
-	local separator = 5
+	--local separator = 5
 
 	for i=1, #self.data do
 		local tempGroup = display.newGroup()
@@ -53,20 +71,38 @@ function display_table(self, data)
 		lable_back.anchorX, lable_back.anchorY = 0, 0
 		lable_back:setFillColor( math.random(50)*0.01, math.random(50)*0.01, math.random(50)*0.01 )
 
-		delete_but = widget.newButton
+		local delete_but = widget.newButton
 		{
-		    left = 180,
+		    left = 260,
 		    top = 0,
 		    --shape = rect,
-		    --width = 10, 
+		    width = 40, 
 		    --height = 10,
 		    
-		    label = "del",
+		    label = "X",
 		    labelColor = {default = {0, 0, 0}},
 		    onPress = function ( event )
-			    transition.to( tempGroup, {time=500, x = 300, onComplete= function()
-			    		tempGroup:removeSelf()-- body
-			    	end} )
+		    	--print("hello")
+		    	--display.getCurrentStage():setFocus(event.target)
+		    	--if(event.phase=="ended") then
+		    		--display.getCurrentStage():setFocus(nil)
+		    		--print( "Button was pressed and released" )
+				    transition.to( tempGroup, {time=500, alpha = 0, x = 300, onComplete= function(event)
+				    		for i=1,#self.viewItems do
+				    			--print("HH")
+				    			print(self.viewItems[i],tempGroup)
+				    			if(self.viewItems[i]==tempGroup) then
+				    				table.remove(self.viewItems, i)
+				    				break
+				    			end
+				    		end
+
+				    		tempGroup:removeSelf()-- body
+				    		tempGroup = nil
+
+				    		self:stack()
+				    	end} )
+				--end
 			    
 			    return true
 			end
@@ -126,24 +162,42 @@ function addItem(self, itemData)
 
 
 
-	delete_but = widget.newButton
-	{
-	    left = 180,
-	    top = 0,
-	    --shape = rect,
-	    --width = 10, 
-	    --height = 10,
-	    
-	    label = "del",
-	    labelColor = {default = {0, 0, 0}},
-	    onPress = function ( event )
-		    transition.to( tempGroup, {time=500, x = 300, onComplete= function()
-		    		tempGroup:removeSelf()-- body
-		    	end} )
+	local delete_but = widget.newButton
+		{
+		    left = 260,
+		    top = 0,
+		    --shape = rect,
+		    width = 40, 
+		    --height = 10,
 		    
-		    return true
-		end
-	}
+		    label = "X",
+		    labelColor = {default = {0, 0, 0}},
+		    onPress = function ( event )
+		    	--print("hello")
+		    	--display.getCurrentStage():setFocus(event.target)
+		    	--if(event.phase=="ended") then
+		    		--display.getCurrentStage():setFocus(nil)
+		    		--print( "Button was pressed and released" )
+				    transition.to( tempGroup, {time=500, alpha = 0, x = 300, onComplete= function(event)
+				    		for i=1,#self.viewItems do
+				    			--print("HH")
+				    			print(self.viewItems[i],tempGroup)
+				    			if(self.viewItems[i]==tempGroup) then
+				    				table.remove(self.viewItems, i)
+				    				break
+				    			end
+				    		end
+
+				    		tempGroup:removeSelf()-- body
+				    		tempGroup = nil
+
+				    		self:stack()
+				    	end} )
+				--end
+			    
+			    return true
+			end
+		}
 
 	tempGroup:insert(delete_but)
 
