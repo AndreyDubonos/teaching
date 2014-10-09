@@ -11,7 +11,9 @@ local function allToPlace(scrollN)
 	local sumHeight = 0
 
 	for i=1, #scrollN.viewItems do
-		scrollN.viewItems[i].y = sumHeight
+		transition.to( scrollN.viewItems[i], {time=500, y = sumHeight, onComplete= function() print(1) end})
+
+		--scrollN.viewItems[i].y = sumHeight
 
 		sumHeight = sumHeight + scrollN.viewItems[i].height + separator
 	end
@@ -82,11 +84,6 @@ function display_table(self, data)
 		    label = "X",
 		    labelColor = {default = {0, 0, 0}},
 		    onPress = function ( event )
-		    	--print("hello")
-		    	--display.getCurrentStage():setFocus(event.target)
-		    	--if(event.phase=="ended") then
-		    		--display.getCurrentStage():setFocus(nil)
-		    		--print( "Button was pressed and released" )
 				    transition.to( tempGroup, {time=500, alpha = 0, x = 300, onComplete= function(event)
 				    		for i=1,#self.viewItems do
 				    			--print("HH")
@@ -100,7 +97,7 @@ function display_table(self, data)
 				    		tempGroup:removeSelf()-- body
 				    		tempGroup = nil
 
-				    		self:stack()
+				    		self:stack() 
 				    	end} )
 				--end
 			    
@@ -152,7 +149,12 @@ function display_table(self, data)
 end
 
 function addItem(self, itemData)
-	local sumHeight = self.viewItems[#self.viewItems].y + 50 + 5
+	local sumHeight
+	if #self.viewItems==0 then
+		sumHeight = 5
+	else
+		sumHeight = self.viewItems[#self.viewItems].y + 50 + 5
+	end
 
 	local tempGroup = display.newGroup()
 
@@ -173,11 +175,6 @@ function addItem(self, itemData)
 		    label = "X",
 		    labelColor = {default = {0, 0, 0}},
 		    onPress = function ( event )
-		    	--print("hello")
-		    	--display.getCurrentStage():setFocus(event.target)
-		    	--if(event.phase=="ended") then
-		    		--display.getCurrentStage():setFocus(nil)
-		    		--print( "Button was pressed and released" )
 				    transition.to( tempGroup, {time=500, alpha = 0, x = 300, onComplete= function(event)
 				    		for i=1,#self.viewItems do
 				    			--print("HH")
