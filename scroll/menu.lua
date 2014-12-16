@@ -19,8 +19,8 @@ end
 function menu_sc:load()
     local path = system.pathForFile(fileName, filePath)
     local contents = ""
-    local file = nil -- io.open( path, "r" )
-
+    local file = io.open( path, "r" )
+    print("file", file)
     if file then
         local contents = file:read( "*a" )
         self.data = json.decode(contents);

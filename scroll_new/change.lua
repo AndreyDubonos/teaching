@@ -11,7 +11,7 @@ end
 
 function scene_ch:exitSave()
     self.data.web = "self.newAdress.text"
-    self.data.name = self.newName.text
+    self.data.name = "self.newName.text"
     composer.gotoScene("menu", {params = self.data, effect = "fade", time = 100})
 end
 
