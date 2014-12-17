@@ -41,9 +41,7 @@ function cr_table:createItem(itemData)
 	{
 		left = 260,
 		top = 0,
-		--shape = rect,
 		width = 40, 
-		--height = 10,
 		
 		label = "X",
 		labelColor = {default = {0, 0, 0}},
@@ -57,6 +55,7 @@ function cr_table:createItem(itemData)
 							for i = 1, #self.viewItems do
 								if (self.viewItems[i] == itemGroup) then
 									table.remove(self.viewItems, i)
+									table.remove(self.data, i)
 									break
 								end
 							end
@@ -78,17 +77,15 @@ function cr_table:createItem(itemData)
 		text = itemData.name,	 
 		x = 170,
 		y = 25,
-		--width = 500,	 --required for multi-line and alignment
 		font = native.systemFontBold,   
 		fontSize = 20,
-		--align = "center"  --new alignment parameter
 	}
 	web_text:setFillColor( 0, 0, 0 )
 	itemGroup:insert(web_text)
 	
-	local logo = display.newImageRect(itemData.logo, 50, 50) -- ERROR 5 parameters, documentation   display.newImageRect( [parentGroup,] filename, [baseDir,] width, height )
+	local logo = display.newImageRect(itemData.logo, 50, 50) 
 	logo.x = 25 
-	logo.y = 25  --EROR 30 что, умножить, делить
+	logo.y = 25  
 
 	itemGroup:insert(logo)
 	itemGroup.y = self.sumHeight

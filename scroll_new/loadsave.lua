@@ -17,6 +17,7 @@ function M.saveTable(t, filename, location)
     end
     
     local path = system.pathForFile( filename, location)
+    print(path)
     local file = io.open(path, "w")
     if file then
         local contents = json.encode(t)

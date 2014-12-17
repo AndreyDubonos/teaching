@@ -15,6 +15,7 @@ end
 
 function menu_sc:load()
     local tempData = loadsave.loadTable(fileName, system.DocumentsDirectory)
+
     if(tempData) then
         self.data = tempData
         print("data loaded")
@@ -32,8 +33,6 @@ end
 function menu_sc:create( event )
     local view = self.view
 
-    -- добавить массив названий!
-    --если файл не пуст, загрузить массивы из файла
     local back = display.newRect(view, display.contentWidth/2, display.contentHeight/2, display.contentWidth, display.contentHeight)
     self:load()
 
@@ -47,7 +46,6 @@ function menu_sc:create( event )
         if ( "ended" == event.phase ) then
             local newItem = {logo = item_logo, web = item_web, name = item_name}
             self.scroll:addItem(newItem)
-            -- TODO: добавить название и адресс в массив данных
             table.insert(self.data, newItem)
             self:save()
         end
