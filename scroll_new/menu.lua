@@ -1,7 +1,6 @@
 local composer = require("composer")
 local widget = require("widget")
 local scroll = require("myScroll")
-local json = require("json")
 local loadsave = require "loadsave"
 
 local menu_sc = composer.newScene()
@@ -14,9 +13,9 @@ function menu_sc:save()
 end
 
 function menu_sc:load()
-    local tempData = loadsave.loadTable(fileName, system.DocumentsDirectory)
+    local tempData = nil -- loadsave.loadTable(fileName, system.DocumentsDirectory)
 
-    if(tempData) then
+    if (tempData) then
         self.data = tempData
         print("data loaded")
     else
@@ -28,6 +27,9 @@ function menu_sc:load()
             {logo = "assets/twitter.png", web = "http://twitter.com", name = "twitter.com"}
         }    
     end
+
+	local json = require("json")
+    print("Loaded: ", json.encode(self.data))
 end
 
 function menu_sc:create( event )
@@ -42,8 +44,8 @@ function menu_sc:create( event )
 
     self.scroll = scroll:create_table()
 
-    function handleButtonEvent( event )
-        if ( "ended" == event.phase ) then
+    function handleButtonEvent(event)
+        if ("ended" == event.phase) then
             local newItem = {logo = item_logo, web = item_web, name = item_name}
             self.scroll:addItem(newItem)
             table.insert(self.data, newItem)
@@ -63,9 +65,9 @@ function menu_sc:create( event )
         width = display.contentWidth * 0.5,
         height = 30,
         fontSize = 16,
-       fillColor = { default={ 0,0,0,0.1 }, over={ 0,0,0,1 } },
-       strokeColor = { default={ 0.25 }, over={ 0.25 } },
-       labelColor = { default={ 0.85 }, over={ 0.85 } },
+       fillColor = {default = {0,0,0,0.1}, over = {0,0,0,1}},
+       strokeColor = { default = { 0.25 }, over = { 0.25}},
+       labelColor = { default={ 0.85 }, over={ 0.85 }},
        strokeWidth = 5,
         id = "butDisplay",
         label = "Display",
@@ -75,17 +77,15 @@ function menu_sc:create( event )
 end
 
 function menu_sc:show(event)
-    print("Params: ", event.params);
-
     if event.params == nil then
         return
     end
-
-    print("Name (show): ", self.data[1].name)
-    
+    local itemGroup = event.params
+    itemGroup.name.text = itemGroup._data.name
     self:save()
 end
-function menu_sc:destroy( event )
+
+function menu_sc:destroy(event)
     self:save()
 end
 

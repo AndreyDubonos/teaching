@@ -46,27 +46,27 @@ function cr_table:createItem(itemData)
 		label = "X",
 		labelColor = {default = {0, 0, 0}},
 		onPress = function(event)
-				transition.to(itemGroup, {
-					time = 500,
-					alpha = 0,
-					x = 300,
-					onComplete =
-						function(event)
-							for i = 1, #self.viewItems do
-								if (self.viewItems[i] == itemGroup) then
-									table.remove(self.viewItems, i)
-									table.remove(self.data, i)
-									break
-								end
+			transition.to(itemGroup, {
+				time = 500,
+				alpha = 0,
+				x = 300,
+				onComplete =
+					function(event)
+						for i = 1, #self.viewItems do
+							if (self.viewItems[i] == itemGroup) then
+								table.remove(self.viewItems, i)
+								table.remove(self.data, i)
+								break
 							end
-
-							itemGroup:removeSelf()
-							itemGroup = nil
-
-							self:stack() 
 						end
-					}
-				)
+
+						itemGroup:removeSelf()
+						itemGroup = nil
+
+						self:stack() 
+					end
+				}
+			)
 			return true
 		end
 	}
@@ -82,6 +82,8 @@ function cr_table:createItem(itemData)
 	}
 	web_text:setFillColor( 0, 0, 0 )
 	itemGroup:insert(web_text)
+	itemGroup.name = web_text
+
 	
 	local logo = display.newImageRect(itemData.logo, 50, 50) 
 	logo.x = 25 
@@ -118,11 +120,11 @@ function cr_table:display(data)
 
 	self.scroll = scrollView
 
-	--local background = display.newRect((scrollView.x + scrollView.width) / 2, (scrollView.y + scrollView.height) / 2, 300, 400)
-	--background:setFillColor(0, 0, 0)
+	local background = display.newRect(display.contentWidth / 2, display.contentHeight / 2, display.contentWidth, display.contentHeight)
+	background:setFillColor(0, 0, 0)
 
 	--Обрати внимение: добавляю в группу self.view, которую верну в вызывающий код
-	--self.view:insert(background)
+	self.view:insert(background)
 	self.view:insert(scrollView)
 
 	self.data = data

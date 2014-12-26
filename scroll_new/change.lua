@@ -20,13 +20,13 @@ function scene_ch:exitSave()
     self.newName.isVisible = false
     --self.newAdress:removeSelf()
     --self.newName:removeSelf()
-    composer.gotoScene("menu", {params = self.data, effect = "fade", time = 100})
+    composer.gotoScene("menu", {params = self.itemGroup, effect = "fade", time = 100})
 end
 
 function scene_ch:create(event)
     local view = self.view
 
-	self.newAdress = native.newTextField(100, 10, 150, 50 )
+	self.newAdress = native.newTextField(100, 10, 150, 50)
     view:insert(self.newAdress)
     self.newAdress.text = "text1"
 
@@ -34,7 +34,7 @@ function scene_ch:create(event)
     view:insert(self.newName)
     self.newName.text = "text2"
 
-	local background = display.newRect( 0, 0, display.contentWidth*2, display.contentHeight*2 )
+	local background = display.newRect(0, 0, display.contentWidth*2, display.contentHeight*2)
 	background:setFillColor(0, 0.5, 0)
     view:insert(background)
 
@@ -70,6 +70,7 @@ function scene_ch:show(event)
 	self.newAdress.isVisible = true
 	self.newName.isVisible = true
     self.data = event.params._data
+    self.itemGroup = event.params
     self.newAdress.text = self.data.web
     self.newName.text = self.data.name
 end
