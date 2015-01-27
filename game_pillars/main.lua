@@ -1,37 +1,74 @@
 local physics = require("physics")
 physics.start()
 
-local pillars = {}
-local number_pil = 1
-local pil_group = display.newGroup()
+local bars = {}
+local bar_count = 1
+local bar_width = 50
 
-local function new_pillar()
-	local rand_y = math.random(10, 50)
-	x_end = (number_pil-1)*20
-	pillars[number_pil] = display.newRect(x_end, display.contentHeight, 20, rand_y)
-	pillars[number_pil].anchorX = 0
-	pillars[number_pil].anchorY = 1
-	pillars[number_pil]:setFillColor(math.random(), math.random(), math.random())
-	physics.addBody(pillars[number_pil] ,"static")
-	--display.newRect( 20, 80, 280, 50 )
-	--x_end = x_end + 20
-	pil_group:insert(pillars[number_pil])
-	transition.to( pillars[number_pil], {time=math.random(10000, 15000), height = math.random(display.contentHeight / 3 * 2, display.contentHeight / 3 * 2 + 50)} )
-	--print("x=", x_end)
-	--print("y=", rand_y)
-	--print("height", display.contentHeight - rand_y)
-	--print("all=", display.contentHeight)
-	number_pil=number_pil+1 --(по надобности хранить в отдельном поле эл-та массива)
+local function on_bar_touch(event)
+	local bar = event.target
+	transition.cancel(bar)
+	transition.to(
+		bar, 
+		{
+			time = math.random(10000, 15000), 
+			height = 0
+		} 
+	)
 end
 
-local function move_pillars()
-	pil_group.x = pil_group.x - 2
+local function new_bar(bar_index)
+	local rand_y = 100 --math.random(10, 50)
+	local x_end = 0
+	local bar
+
+	for _, bar in ipairs(bars) do
+		local bar_right = bar.x + bar.width	
+		if bar_right > x_end then x_end = bar_right end
+	end
+
+	bar = display.newRect(x_end, display.contentHeight, bar_width, rand_y)
+	bar:addEventListener("touch", on_bar_touch)
+
+	bar.anchorX = 0
+	bar.anchorY = 1
+	bar:setFillColor(math.random(), math.random(), math.random())
+	physics.addBody(bar ,"static")
+
+	local height_limit = display.contentHeight / 3 * 2
+	transition.to(
+		bar, 
+		{
+			time = math.random(10000, 15000), 
+			height = math.random(height_limit, height_limit + 50)
+		} 
+	)
+
+	bars[bar_index] = bar
+	return x_end
 end
 
---for i = 1, 16 do
---	new_pillar(i)
---end
+local function create_bars()
+	local bar_index = 1
+	local bar_right
+	repeat
+		bar_right = new_bar(bar_index)
+		bar_index = bar_index + 1
+	until bar_right > display.contentWidth
+end
 
+local function move_bars()
+	local bar, index
+	local move_value = 2
+	for index, bar in ipairs(bars) do
+		bar.x = bar.x - move_value
+		if bar.x + bar.width < 0 then
+			bar:removeSelf()
+			new_bar(index)
+		end
+	end
+end
 
-local show_pillars = timer.performWithDelay(500, new_pillar, 0)
-local move = timer.performWithDelay(60, move_pillars, 0)
+create_bars()
+
+local move = timer.performWithDelay(60, move_bars, 0)
