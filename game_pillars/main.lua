@@ -1,9 +1,23 @@
 local physics = require("physics")
 physics.start()
 
+display.setStatusBar( display.HiddenStatusBar )
+
 local bars = {}
 local bar_count = 1
 local bar_width = 50
+
+local barColors = {{ r = 255, g = 164, b = 32}, { r = 0, g = 91, b = 223}, {	r = 1, g = 117, b = 168},
+	{r = 112, g = 0, b = 255}, { r = 143, g = 255, b = 0}, {r = 99, g = 247, b = 180}} --add more colors
+
+for i=1, #barColors do
+	barColors[i].r = barColors[i].r /255
+	barColors[i].g = barColors[i].g /255
+	barColors[i].b = barColors[i].b /255
+end
+
+local bacground = display.newRect( display.contentWidth /2, display.contentHeight /2, display.contentWidth, display.contentHeight )
+bacground:setFillColor( 0.95 )
 
 local function on_bar_touch(event)
 	local bar = event.target
@@ -32,7 +46,10 @@ local function new_bar(bar_index)
 
 	bar.anchorX = 0
 	bar.anchorY = 1
-	bar:setFillColor(math.random(), math.random(), math.random())
+
+	local colorIndex = math.random( 1, #barColors )
+
+	bar:setFillColor(barColors[colorIndex].r, barColors[colorIndex].g, barColors[colorIndex].b)
 	physics.addBody(bar ,"static")
 
 	local height_limit = display.contentHeight / 3 * 2
