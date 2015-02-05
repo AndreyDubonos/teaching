@@ -5,6 +5,8 @@ display.setStatusBar(display.HiddenStatusBar)
 
 local bars = {}
 local active_bar = nil
+local active_x = 0
+local active_y = 0
 local bar_count = 1
 local bar_width = 50
 
@@ -13,7 +15,9 @@ local barColors = {"1E2F73", "B92028", "EEB51C", "088240", "007A8E", "004C91", "
 local background = display.newRect(display.contentWidth / 2, display.contentHeight / 2, display.contentWidth, display.contentHeight)
 background:setFillColor(0.95)
 
-local function cancel_touch()
+local function cancel_active()
+	if active_bar == nil then return end
+
 	transition.cancel(active_bar)
 	local height_limit = display.contentHeight / 3 * 2
 	transition.to(
@@ -23,28 +27,58 @@ local function cancel_touch()
 			height = math.random(height_limit, height_limit + 50)
 		} 
 	)
+	active_bar = nil
+end
+
+local function set_active_bar(bar, x, y)
+	if active_bar ~= nil then
+		cancel_active()
+	end
+
+	if bar == nil then
+		return
+	end
+
+	active_bar = bar
+	active_x = x
+	active_y = y
+
+	transition.cancel(bar)
+	transition.to(
+		bar, 
+		{
+			time = math.random(6000, 8000), 
+			height = 0
+		} 
+	)
+end
+
+local function end_touch()
+	active_x = nil
+	active_y = nil
 end
 
 local function on_back_touch(event)
-	if event.phase == "ended" then
-		cancel_touch()
+	if event.phase == "began" or  event.phase == "moved" then
+		active_x = event.x
+		active_y = event.y
+	elseif event.phase == "ended" then
+		cancel_active()
+		end_touch()
 	end
 end
 
 local function on_bar_touch(event)
 	local bar = event.target
 	if event.phase == "began" then
-		active_bar = bar		
-		transition.cancel(bar)
-		transition.to(
-			bar, 
-			{
-				time = math.random(6000, 8000), 
-				height = 0
-			} 
-		)
+		set_active_bar(bar, event.x, event.y)
+	elseif event.phase == "moved" then
+		if active_bar ~= bar then
+			set_active_bar(bar, event.x, event.y)
+		end
 	elseif event.phase == "ended" then
-		cancel_touch()
+		cancel_active()
+		end_touch();
 	end
 end
 
@@ -97,12 +131,36 @@ end
 local function move_bars()
 	local bar, index
 	local move_value = 2
+	local new_active_bar = nil
+
 	for index, bar in ipairs(bars) do
 		bar.x = bar.x - move_value
 		if bar.x + bar.width < 0 then
 			bar:removeSelf()
 			new_bar(index)
+			bar = bars[index]
 		end
+
+		if active_x ~= nil and active_y ~= nil then
+			local bounds = bar.contentBounds
+
+			if
+				active_x >= bounds.xMin and active_x <= bounds.xMax and
+				active_y >= bounds.yMin and active_y <= bounds.yMax
+			then
+				print("BoundsMatch( ", index, "): ", active_x, ", ", active_y, " in ", bounds.xMin, ", ", bounds.yMin, ", ", bounds.xMax, ", ", bounds.yMax)
+				new_active_bar = bar
+			end
+		end
+	end
+
+	if new_active_bar ~= active_bar then
+		if new_active_bar == nil then
+			print("ActiveNotFound")
+		else
+			print("ActiveChanged ", new_active_bar._index)
+		end
+		set_active_bar(new_active_bar, active_x, active_y)
 	end
 end
 
