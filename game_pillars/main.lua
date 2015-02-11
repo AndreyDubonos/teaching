@@ -145,21 +145,21 @@ local function move_bars()
 			local bounds = bar.contentBounds
 
 			if
-				active_x >= bounds.xMin and active_x <= bounds.xMax and
-				active_y >= bounds.yMin and active_y <= bounds.yMax
+				active_x >= bounds.xMin and active_x <= bounds.xMax --and
+				--active_y >= bounds.yMin and active_y <= bounds.yMax
 			then
-				print("BoundsMatch( ", index, "): ", active_x, ", ", active_y, " in ", bounds.xMin, ", ", bounds.yMin, ", ", bounds.xMax, ", ", bounds.yMax)
+				--print("BoundsMatch( ", index, "): ", active_x, ", ", active_y, " in ", bounds.xMin, ", ", bounds.yMin, ", ", bounds.xMax, ", ", bounds.yMax)
 				new_active_bar = bar
 			end
 		end
 	end
 
 	if new_active_bar ~= active_bar then
-		if new_active_bar == nil then
-			print("ActiveNotFound")
-		else
-			print("ActiveChanged ", new_active_bar._index)
-		end
+		-- if new_active_bar == nil then
+		-- 	print("ActiveNotFound")
+		-- else
+		-- 	print("ActiveChanged ", new_active_bar._index)
+		-- end
 		set_active_bar(new_active_bar, active_x, active_y)
 	end
 end
