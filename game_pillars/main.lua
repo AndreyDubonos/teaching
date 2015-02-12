@@ -10,24 +10,46 @@ local active_y = 0
 local bar_count = 1
 local bar_width = 50
 
+local move_value = 2
+local defaultBarHeight = display.contentHeight /2 
+local randomAddingValue = 5
+
+local growingValue = 5
+local reductingValue = 5
+
+local minHeightValue = 100
+
 local barColors = {"1E2F73", "B92028", "EEB51C", "088240", "007A8E", "004C91", "00230B"}
 
 local background = display.newRect(display.contentWidth / 2, display.contentHeight / 2, display.contentWidth, display.contentHeight)
 background:setFillColor(0.95)
 
+
+
 local function cancel_active()
 	if active_bar == nil then return end
 
-	transition.cancel(active_bar)
-	local height_limit = display.contentHeight / 3 * 2
-	transition.to(
-		active_bar, 
-		{
-			time = math.random(4000, 6000), 
-			height = math.random(height_limit, height_limit + 50)
-		} 
-	)
+	--transition.cancel(active_bar)
+
+	--transition.to(
+	--	active_bar, 
+	--	{
+	--		time = math.random(4000, 6000), 
+	--		height = math.random(defaultBarHeight, defaultBarHeight + randomAddingValue)
+	--	} 
+	--)
 	active_bar = nil
+end
+
+local function HEX_Colors_to_Corona_Colors(HEX_Color)	
+	local colorVal = tonumber(HEX_Color, 16)
+	local corona_Color = {
+		r = colorVal / 65536 / 256,
+		g = (colorVal / 256) % 256 / 256,
+		b = (colorVal % 256) / 256
+	}
+
+	return corona_Color
 end
 
 local function set_active_bar(bar, x, y)
@@ -43,14 +65,14 @@ local function set_active_bar(bar, x, y)
 	active_x = x
 	active_y = y
 
-	transition.cancel(bar)
-	transition.to(
-		bar, 
-		{
-			time = math.random(6000, 8000), 
-			height = 0
-		} 
-	)
+	--transition.cancel(bar)
+	--transition.to(
+	--	bar, 
+	--	{
+	--		time = math.random(6000, 8000), 
+	--		height = 0
+	--	} 
+	--)
 end
 
 local function end_touch()
@@ -99,21 +121,22 @@ local function new_bar(bar_index)
 	bar.anchorY = 1
 	bar._index = bar_index
 
-	local colorHex = barColors[math.random(1, #barColors)]
-	local colorVal = tonumber(colorHex, 16)
+	local colorVal = barColors[math.random(1, #barColors)]
+	--local colorVal = tonumber(colorHex, 16)
 
 	-- extract each of 3 RGB components and convert them to floating point number
-	bar:setFillColor(colorVal / 65536 / 256, (colorVal / 256) % 256 / 256, (colorVal % 256) / 256)
+	print(colorVal)
+	bar:setFillColor(colorVal.r, colorVal.g, colorVal.b)
 	physics.addBody(bar, "static")
 
-	local height_limit = display.contentHeight / 3 * 2
-	transition.to(
-		bar, 
-		{
-			time = math.random(6000, 8000), 
-			height = math.random(height_limit, height_limit + 50)
-		} 
-	)
+	bar.originHeight = math.random(defaultBarHeight, defaultBarHeight + randomAddingValue)
+	--transition.to(
+	--	bar, 
+	--	{
+	--		time = math.random(6000, 8000), 
+	--		height = bar.originHeight
+	--	} 
+	--)
 
 	bars[bar_index] = bar
 	return x_end
@@ -129,8 +152,10 @@ local function create_bars()
 end
 
 local function move_bars()
+
+	--move and create bars
 	local bar, index
-	local move_value = 2
+	
 	local new_active_bar = nil
 
 	for index, bar in ipairs(bars) do
@@ -162,9 +187,39 @@ local function move_bars()
 		-- end
 		set_active_bar(new_active_bar, active_x, active_y)
 	end
+
+	--growth and reduction of bars
+	for i=1, #bars do		
+		if(bars[i] ~= active_bar) then -- growth bar
+			if(bars[i].height ~= bars[i].originHeight) then
+				bars[i].height = bars[i].height + growingValue
+				if(bars[i].height > bars[i].originHeight) then
+					bars[i].height = bars[i].originHeight
+				end
+			end
+		else
+			if(bars[i].height > minHeightValue) then
+				bars[i].height = bars[i].height - reductingValue
+				if(bars[i].height < minHeightValue) then
+					bars[i].height = minHeightValue
+				end
+			end
+		end		
+	end
 end
 
-create_bars()
+local function start()
+	for i=1, #barColors do
+		barColors[i] = HEX_Colors_to_Corona_Colors(barColors[i])
+	end
 
-background:addEventListener("touch", on_back_touch)
-local move = timer.performWithDelay(60, move_bars, 0)
+	create_bars()
+	background:addEventListener("touch", on_back_touch)
+
+	Runtime:addEventListener( "enterFrame", move_bars )
+	--local move = timer.performWithDelay(60, move_bars, 0)
+end
+
+start()
+
+
